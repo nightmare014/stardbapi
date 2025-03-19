@@ -19,7 +19,7 @@ const withChildFunction = (Wrapped, fn) => {
         )
     }
 }
-
+<span>{name}, &nbsp;{model}</span>
 const renderNameAndGender = ({name, gender}) =>
     <span>{name}, &nbsp;{gender}</span>
 
