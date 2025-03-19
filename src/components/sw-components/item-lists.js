@@ -1,56 +1,42 @@
-import React from "react"
-import { withData, withSwapiService, 
-    withChildFunction, compose } from "../hoc-helpers" 
-    import ItemList from "../item-list";
- 
-    const renderNameAndGender = ({name, gender}) =>
-        <span>{name}, &nbsp;{gender}</span>
-    
-    const renderNameAndModel = ({ name, model }) =>
-        <span>{name}, &nbsp;{model}</span>
-    
-    const renderNameAndPopulation = ({ name, population }) =>
-        <span>{name}, &nbsp;{population} {population !== 'unknown' ? 'people' : null}</span>
-    
-    // Transform methods
-    
-    const mapPersonMethodsToProps = (swapiService) => {
-        return {
-            getData: swapiService.getAllPeople
-        }
+
+import SwapiService from "../../services/swapi-service";
+import { withData } from "../hoc-helpers";
+import ItemList from "../item-list";
+import React from "react";
+
+const {
+    getAllPeople,
+    getAllStarships,
+    getAllPlanets
+} = new SwapiService()
+
+const withChildFunction = (Wrapped, fn) => {
+    return (props) => {
+        return (
+            <Wrapped { ...props }>
+                { fn }
+            </Wrapped>
+        )
     }
-    const mapPlanetMethodsToProps = (swapiService) => {
-        return {
-            getData: swapiService.getAllPlanets
-        }
-    }
-    const mapStarshipMethodsToProps = (swapiService) => {
-        return {
-            getData: swapiService.getAllStarships
-        }
-    }
+}
 
- const PersonList = compose(
-    withSwapiService(mapPersonMethodsToProps),
-    withData,
-    withChildFunction(renderNameAndGender)
-)(ItemList)
+const renderNameAndGender = ({name, gender}) =>
+    <span>{name}, &nbsp;{gender}</span>
 
-const PlanetList = compose(
-    withSwapiService(mapPlanetMethodsToProps),
-    withData,
-    withChildFunction(renderNameAndPopulation)
-)(ItemList)
+const renderNameAndModel = ({ name, model }) =>
+    <span>{name}, &nbsp;model: {model}</span>
 
-const StarshipList = compose(
-    withSwapiService(mapStarshipMethodsToProps),
-    withData,
-    withChildFunction(renderNameAndModel)
-)(ItemList)
+const renderNameAndPopulation = ({ name, population }) =>
+    <span>{name}, &nbsp;{population} {population !== 'unknown' ? 'people' : null}</span>
 
+const PersonList = withData(withChildFunction(ItemList, renderNameAndGender), getAllPeople)
+
+const PlanetList = withData(withChildFunction(ItemList, renderNameAndPopulation), getAllPlanets)
+
+const StarshipList = withData(withChildFunction(ItemList, renderNameAndModel), getAllStarships)
 
 export {
     PersonList,
     PlanetList,
-     StarshipList
- }
+    StarshipList
+}
