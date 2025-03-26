@@ -37,4 +37,7 @@ import React from 'react'
      children: PropTypes.func.isRequired
  }
  
+ ItemList.defaultProps = {
+    onItemSelected: () => {}
+}
  export default ItemList
