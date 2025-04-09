@@ -5,7 +5,8 @@ import React from "react"
      if (isLoggedIn) {
          return (
              <div className="jumbotron text-center">
-<h5>This page is full of secrets!!!</h5>             </div>
+                 <h5>This page is full of secrets!!!</h5>
+             </div>
          )
      }
  
